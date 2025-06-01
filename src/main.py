@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from extract import Extract
 from s3_ingestion import BucketLoader
+from mysql_ingestion import MysqlLoader
 
 load_dotenv()
 
@@ -13,6 +14,10 @@ def create_extractor(url):
 
 def s3_connection(aws_access_key_id, aws_secret_access_key, region_name):
     return BucketLoader(aws_access_key_id, aws_secret_access_key, region_name)
+
+def mysql_connection(host_name, user, pw):
+    return MysqlLoader(host_name, user, pw)
+    
 
 
 if __name__ == '__main__':
@@ -49,3 +54,20 @@ if __name__ == '__main__':
     s3 = bucket_loader.s3_connection()
     
     bucket_loader.s3_upload_files(s3, parquet, str(os.getenv('bucket_name')),'staging/dolar.parquet' )
+    
+    # Carga para mysql
+    mysql_loader = mysql_connection(
+        host_name=str(os.getenv('HOST')),
+        user=str(os.getenv('USER')),
+        pw = str(os.getenv('PASS'))
+    )
+    
+    connection = mysql_loader.connect_mysql()
+    cursor = mysql_loader.create_cursor(connection)
+    mysql_loader.load_data(
+        connection=connection, 
+        cursor=cursor,
+        db_name=str(os.getenv('DB_NAME')),
+        tb_name=str(os.getenv('DB_TABLE')),
+        df=dataframe_final
+    )

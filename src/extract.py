@@ -22,7 +22,7 @@ class Extract():
     
     def request_into_dataframe(self, response):
         df = pd.DataFrame(response)
-        df['data_extracao'] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+        df['dataExtracao'] = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
         return df
     
     def save_dataframe_into_csv(self, df, name):
@@ -45,9 +45,15 @@ class Extract():
         df['data'] = pd.to_datetime(df['data'])         
         df_datas['data'] = pd.to_datetime(df_datas['data'])
         
-        df_merged = pd.merge(df_datas, df[['data', 'cotacaoCompra', 'cotacaoVenda', 'dataHoraCotacao', 'data_extracao']], on='data', how='left')
+        df_merged = pd.merge(df_datas, df[['data', 'cotacaoCompra', 'cotacaoVenda', 'dataHoraCotacao', 'dataExtracao']], on='data', how='left')
         df_merged.sort_values('data', inplace=True)  
         df_merged.fillna(method='bfill', inplace=True) 
         df_merged.fillna(method='ffill', inplace=True)
         
+        df_merged["dataExtracao"] = pd.to_datetime(df_merged["dataExtracao"])
+        df_merged["dataExtracao"] = df_merged["dataExtracao"].dt.strftime("%Y-%m-%d %H:%M:%S")
+        df_merged["dataHoraCotacao"] = df_merged["dataHoraCotacao"].dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        
         return df_merged
+    
