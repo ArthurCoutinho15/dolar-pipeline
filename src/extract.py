@@ -26,10 +26,14 @@ class Extract():
         return df
     
     def save_dataframe_into_csv(self, df, name):
-        df.to_csv(f'D:\\Projetos\\Python\\Data_Engineering\\dolar-pipeline\\data\\{name}.csv', index=False)
+        path = f'D:\\Projetos\\Python\\Data_Engineering\\dolar-pipeline\\data\\{name}.csv'
+        df.to_csv(path, index=False)
+        
     
     def save_dataframe_into_parquet(self, df, name):
-        df.to_csv(f'D:\\Projetos\\Python\\Data_Engineering\\dolar-pipeline\\data\\{name}.parquet', index=False)
+        path = f'D:\\Projetos\\Python\\Data_Engineering\\dolar-pipeline\\data\\{name}.parquet'
+        df.to_parquet(path, index=False)
+        return path
         
     def tratativas_dataframe(self, df):
         df['dataHoraCotacao'] = pd.to_datetime(df['dataHoraCotacao'])

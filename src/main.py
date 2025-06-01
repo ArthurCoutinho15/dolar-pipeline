@@ -1,10 +1,18 @@
 from datetime import datetime
 import logging
+import os
+from dotenv import load_dotenv
 
 from extract import Extract
+from s3_ingestion import BucketLoader
+
+load_dotenv()
 
 def create_extractor(url):
     return Extract(url)
+
+def s3_connection(aws_access_key_id, aws_secret_access_key, region_name):
+    return BucketLoader(aws_access_key_id, aws_secret_access_key, region_name)
 
 
 if __name__ == '__main__':
@@ -12,7 +20,7 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     
     data = datetime.now().strftime("%m-%d-%Y") 
-    horario = datetime.now().strftime("%H-%M")
+    horario = datetime.now().strftime("%H")
     file_name = f"dolar_{data}_{horario}"
     
     
@@ -22,11 +30,22 @@ if __name__ == '__main__':
     extractor = create_extractor(url)
     logging.info(f'Extraindo dados {data}')
     
+    # Extração da api e tratamentos
     response = extractor.extract_api()
     dataframe = extractor.request_into_dataframe(response)
-    extractor.save_dataframe_into_csv(df=dataframe, name=file_name)
-    ##extractor.save_dataframe_into_parquet(df=dataframe, name=file_name)
     
     dataframe_final = extractor.tratativas_dataframe(dataframe)
     extractor.save_dataframe_into_csv(df=dataframe_final, name="final")
+    parquet = extractor.save_dataframe_into_parquet(df=dataframe_final, name=file_name)
     
+    # Configuração e persistência no s3
+    bucket_loader = s3_connection(
+        aws_access_key_id = str(os.getenv('aws_access_key_id')),
+        aws_secret_access_key= str(os.getenv('aws_secret_access_key')),
+        region_name= str(os.getenv('region_name'))
+    
+    )
+    
+    s3 = bucket_loader.s3_connection()
+    
+    bucket_loader.s3_upload_files(s3, parquet, str(os.getenv('bucket_name')),'staging/dolar.parquet' )
