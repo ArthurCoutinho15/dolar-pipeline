@@ -3,6 +3,8 @@ import logging
 import os
 from dotenv import load_dotenv
 
+import pandas as pd
+
 from extract import Extract
 from s3_ingestion import BucketLoader
 from mysql_ingestion import MysqlLoader
@@ -61,7 +63,7 @@ if __name__ == '__main__':
         user=str(os.getenv('USER')),
         pw = str(os.getenv('PASS'))
     )
-    
+        
     connection = mysql_loader.connect_mysql()
     cursor = mysql_loader.create_cursor(connection)
     mysql_loader.load_data(
@@ -71,3 +73,5 @@ if __name__ == '__main__':
         tb_name=str(os.getenv('DB_TABLE')),
         df=dataframe_final
     )
+    
+    

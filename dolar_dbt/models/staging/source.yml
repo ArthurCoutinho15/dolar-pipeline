@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: dolar_pipeline
+    database: dolar_pipeline  
+    schema: dolar_pipeline  
+    tables:
+      - name: base_clientes
+      - name: cotacao_dolar

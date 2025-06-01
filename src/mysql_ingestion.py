@@ -26,7 +26,14 @@ class MysqlLoader():
     
     def load_data(self, connection, cursor, db_name, tb_name, df):
         list = [tuple(row) for i, row in df.iterrows()]
-        sql = f'INSERT INTO {db_name}.{tb_name} VALUES (%s,%s,%s,%s,%s)'
+        sql = f"""
+                INSERT INTO {db_name}.{tb_name} VALUES (%s,%s,%s,%s,%s)
+                ON DUPLICATE KEY UPDATE
+                cotacaoCompra=VALUES(cotacaoCompra),
+                cotacaoVenda=VALUES(cotacaoVenda),
+                dataHoraCotacao=VALUES(dataHoraCotacao),
+                dataExtracao=VALUES(dataExtracao)
+            """ 
         
         cursor.executemany(sql, list)
         logging.info(f'\n {cursor.rowcount} dados foram inseridos na tabela {tb_name}')
