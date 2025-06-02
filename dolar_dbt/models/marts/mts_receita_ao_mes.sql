@@ -10,3 +10,4 @@ select
     sum(receita_ao_dia) as receita_mes
 from source
 group by 1, 2, 3 
+

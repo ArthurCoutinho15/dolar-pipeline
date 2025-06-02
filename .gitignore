@@ -5,6 +5,8 @@ __pycache__/
 *$py.class
 venv
 .env
+logs
+airflow/logs
 # C extensions
 *.so
 

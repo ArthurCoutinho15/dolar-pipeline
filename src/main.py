@@ -3,6 +3,7 @@ import logging
 import os
 from dotenv import load_dotenv
 
+
 import pandas as pd
 
 from extract import Extract
@@ -20,10 +21,7 @@ def s3_connection(aws_access_key_id, aws_secret_access_key, region_name):
 def mysql_connection(host_name, user, pw):
     return MysqlLoader(host_name, user, pw)
     
-
-
-if __name__ == '__main__':
-    
+def main():
     logging.basicConfig(level=logging.INFO)
     
     data = datetime.now().strftime("%m-%d-%Y") 
@@ -56,8 +54,8 @@ if __name__ == '__main__':
     s3 = bucket_loader.s3_connection()
     
     bucket_loader.s3_upload_files(s3, parquet, str(os.getenv('bucket_name')),'staging/dolar.parquet' )
-    
-    # Carga para mysql
+        
+        # Carga para mysql
     mysql_loader = mysql_connection(
         host_name=str(os.getenv('HOST')),
         user=str(os.getenv('USER')),
@@ -73,5 +71,7 @@ if __name__ == '__main__':
         tb_name=str(os.getenv('DB_TABLE')),
         df=dataframe_final
     )
+    
+main()
     
     
