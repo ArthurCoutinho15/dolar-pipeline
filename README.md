@@ -3,7 +3,7 @@
 <img src="https://github.com/ArthurCoutinho15/dolar-pipeline/blob/main/img/Diagrama.png" alt="Diagrama pipeline">
 <p> 
     O Pipeline se iniciou organizando o Código em um paradigma orientado a objetos permitindo modularização e organização. 
-    A primeira etapa foi a extração da API utilizando requests, logo após a transformação dos dados ocorreram fazendo o tratamento de dados nulos, pois a api não retorna dados dos finais de semana e feriados
+    A primeira etapa foi a extração da API utilizando requests. Logo após, a transformação dos dados ocorreram fazendo o tratamento de dados nulos, pois a api não retorna dados dos finais de semana e feriados
     então a alternativa foi utilizar a cotação do dia anterior. 
     Após isso, ocorreu a persitência dos dados em arquivos parquet com um bucket no Amazon S3.
     Em seguida ocorre carga incremental no MySQL.
