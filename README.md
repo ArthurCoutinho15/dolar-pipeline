@@ -1,6 +1,6 @@
 <h1>Teste técnico -Pipeline extração dados do dólar na API Banco Central</h1>
 <h2>Estrutura do projeto</h2>
-<img src="" alt="">
+<img src="https://github.com/ArthurCoutinho15/dolar-pipeline/blob/main/img/Diagrama.png" alt="Diagrama pipeline">
 <p> 
     O Pipeline se iniciou organizando o Código em um paradigma orientado a objetos permitindo modularização e organização. 
     A primeira etapa foi a extração da API utilizando requests, logo após a transformação dos dados ocorreram fazendo o tratamento de dados nulos, pois a api não retorna dados dos finais de semana e feriados
